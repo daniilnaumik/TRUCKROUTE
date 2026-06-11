@@ -1,0 +1,71 @@
+{
+  "expo": {
+    "name": "TruckRoute",
+    "slug": "truckroute",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "truckroute",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0b0c0b"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.truckroute.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "TruckRoute использует геолокацию для уведомлений о приближении к точкам маршрута.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "TruckRoute использует геолокацию в фоне для уведомлений о точках маршрута во время поездки.",
+        "NSLocationAlwaysUsageDescription": "TruckRoute использует геолокацию в фоне для уведомлений во время поездки."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0b0c0b"
+      },
+      "package": "com.truckroute.app",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "TruckRoute использует геолокацию для уведомлений о приближении к точкам маршрута."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#c99b3a"
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Ionicons.ttf"
+          ]
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    }
+  }
+}
