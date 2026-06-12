@@ -23,9 +23,9 @@ TruckRouteLaravel_light/
 
 | Компонент | Технология | Отвечает за |
 |-----------|-----------|------------|
-| **API backend** | Laravel 12, PHP 8.3, MySQL 8 | Бизнес-логика, хранение данных, JWT/Sanctum аутентификация, расчёт маршрутов, геокодирование через Nominatim, роутинг через OSRM |
+| **API backend** | Laravel 12, PHP 8.2+, SQLite | Бизнес-логика, хранение данных, аутентификация Laravel Sanctum, расчёт маршрутов, геокодирование через Nominatim, роутинг через OSRM |
 | **Web SPA** | Vue 3, Pinia, Vue Router, Vite | Интерфейс пользователя, 5-шаговый wizard построения маршрута, карты (Leaflet + CartoDB Voyager), POI каталог, профиль |
-| **Mobile** | React Native, Expo SDK 52, TypeScript | Мобильный интерфейс, фоновая геолокация, FCM push-уведомления, proximity alerts |
+| **Mobile** | React Native, Expo SDK 54, TypeScript | Мобильный интерфейс, геолокация, push-уведомления и предупреждения о ближайших объектах |
 | **Очередь** | Laravel Queue (database driver) | Фоновые задачи: `ProximityAlertJob` — проверка расстояния до точек маршрута |
 | **Геокодирование** | Nominatim (OpenStreetMap) | Адрес → координаты, обратное геокодирование |
 | **Роутинг** | OSRM (router.project-osrm.org) | Построение реального маршрута, полилиния, расстояние |
@@ -34,8 +34,8 @@ TruckRouteLaravel_light/
 
 ## Требования
 
-- PHP 8.3+
-- MySQL 8.0+ (с поддержкой `ST_Distance_Sphere`)
+- PHP 8.2+
+- SQLite и расширение PHP `pdo_sqlite`
 - Node.js 20+
 - Composer 2
 - Для мобилки: Expo CLI, Android Studio / Xcode
@@ -67,12 +67,7 @@ php artisan key:generate
 APP_URL=http://localhost:8000
 APP_DEBUG=true
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=truckroute_laravel
-DB_USERNAME=root
-DB_PASSWORD=
+DB_CONNECTION=sqlite
 
 # Геокодирование (бесплатный Nominatim, без ключа)
 GEO_GEOCODER=nominatim
@@ -87,9 +82,8 @@ FCM_SERVER_KEY=
 ### 3. База данных и сиды
 
 ```bash
-# Создать базу данных трукроут в MySQL, затем:
-php artisan migrate
-php artisan db:seed
+# Создать структуру SQLite и наполнить демонстрационными данными:
+php artisan migrate:fresh --seed
 ```
 
 После сида доступны тестовые аккаунты:
@@ -97,7 +91,15 @@ php artisan db:seed
 | Email | Пароль | Роль |
 |-------|--------|------|
 | `driver@truckroute.local` | `password` | driver |
+| `driver2@truckroute.local` | `password` | driver |
+| `provider@truckroute.local` | `password` | provider |
+| `fleet@truckroute.local` | `password` | fleet |
 | `admin@truckroute.local` | `password` | admin |
+
+Локальный файл `database/database.sqlite` намеренно исключён из Git.
+Поэтому тестовые пользователи создаются командой сида, а не хранятся
+в репозитории в виде готовой базы. Исходные данные аккаунтов находятся
+в `database/seeders/DatabaseSeeder.php`.
 
 ### 4. Собрать фронтенд
 
@@ -425,7 +427,8 @@ tests/
 ## Dev-инструменты
 
 **Переключатель ролей в navbar** (видим только при `APP_DEBUG=true`):  
-Кнопка `тест` открывает дропдаун с быстрым входом как driver или admin.  
+Кнопка `тест` открывает список демонстрационных водителей, поставщика,
+владельца автопарка и администратора.
 Работает через `/dev/switch?email=...` — выход + вход в одном GET-запросе.
 
 **Тестовые тайлы карты:**  

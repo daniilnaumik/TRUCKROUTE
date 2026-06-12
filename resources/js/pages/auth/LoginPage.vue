@@ -1,24 +1,25 @@
 <template>
-    <div class="auth-page">
-        <div class="auth-modal is-open" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;">
-            <div class="auth-modal__backdrop" style="position:fixed;inset:0;background:var(--glass-backdrop);backdrop-filter:blur(8px);"></div>
-            <div class="auth-modal__panel" role="main" style="position:relative;z-index:2;">
-                <span class="badge">вход в аккаунт</span>
-                <h2 style="margin-top:18px;">Войдите в TruckRoute</h2>
-                <p class="lead">Доступ к маршрутам, профилю и уведомлениям.</p>
+    <main class="auth-screen">
+        <section class="auth-card auth-card--login" role="main" aria-labelledby="login-title">
+            <header class="auth-header">
+                <span class="badge">Вход в аккаунт</span>
+                <h1 id="login-title">Войти в TruckRoute</h1>
+                <p>Доступ к маршрутам, профилю и уведомлениям.</p>
+            </header>
 
-                <AlertCard
-                    v-if="alert"
-                    :type="alert.type"
-                    :title="alert.title"
-                    :body="alert.body"
-                    :hint="alert.hint"
-                    :dismissible="true"
-                    style="margin-top:20px;"
-                    @close="alert = null"
-                />
+            <AlertCard
+                v-if="alert"
+                :type="alert.type"
+                :title="alert.title"
+                :body="alert.body"
+                :hint="alert.hint"
+                :dismissible="true"
+                class="auth-alert"
+                @close="alert = null"
+            />
 
-                <form class="form-grid" style="margin-top:24px;" @submit.prevent="submit" novalidate>
+            <form class="auth-form" @submit.prevent="submit" novalidate>
+                <div class="auth-fields">
                     <div class="field">
                         <label for="email">Email</label>
                         <input
@@ -33,6 +34,7 @@
                         >
                         <FieldError :error="errors.email" />
                     </div>
+
                     <div class="field">
                         <label for="password">Пароль</label>
                         <input
@@ -42,21 +44,25 @@
                             type="password"
                             autocomplete="current-password"
                             required
-                            placeholder="••••••••"
+                            placeholder="Введите пароль"
                             @input="clearError('password')"
                         >
                         <FieldError :error="errors.password" />
                     </div>
-                    <div class="actions" style="margin-top:8px;">
-                        <button type="submit" class="btn" :disabled="auth.loading">
-                            {{ auth.loading ? 'Входим...' : 'Войти' }}
-                        </button>
-                        <RouterLink :to="{ name: 'register' }" class="btn outline">Создать аккаунт</RouterLink>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                </div>
+
+                <div class="auth-actions">
+                    <button type="submit" class="btn auth-primary" :disabled="auth.loading">
+                        {{ auth.loading ? 'Входим...' : 'Войти' }}
+                    </button>
+                    <p>
+                        Нет аккаунта?
+                        <RouterLink :to="{ name: 'register' }">Создать аккаунт</RouterLink>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </main>
 </template>
 
 <script setup>
@@ -128,9 +134,150 @@ async function submit() {
 </script>
 
 <style scoped>
+
+.auth-screen {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 48px 24px;
+    background: var(--bg);
+}
+
+.auth-card {
+    width: min(760px, 100%);
+    padding: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--s0);
+}
+
+.auth-header {
+    max-width: 620px;
+}
+
+.auth-header h1 {
+    margin: 18px 0 0;
+    color: var(--text);
+    font-size: clamp(42px, 6vw, 68px);
+    font-weight: 400;
+    line-height: .98;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.auth-header h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    margin-top: 28px;
+    background: var(--accent);
+}
+
+.auth-header p {
+    margin: 26px 0 0;
+    color: var(--text-2);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.auth-alert {
+    margin-top: 24px;
+}
+
+.auth-form {
+    margin-top: 30px;
+}
+
+.auth-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.auth-field--wide {
+    grid-column: 1 / -1;
+}
+
+.auth-fields :deep(.field input) {
+    height: 52px;
+}
+
+.field label span {
+    color: var(--text-3);
+}
+
+.auth-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.auth-primary {
+    min-width: 210px;
+    justify-content: center;
+}
+
+.auth-actions p {
+    margin: 0;
+    color: var(--text-3);
+    font-size: 13px;
+}
+
+.auth-actions a {
+    margin-left: 6px;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-a);
+}
+
 input.has-error {
     border-color: var(--red);
-    background: rgba(192,49,42,.04);
+    background: rgba(192, 49, 42, .04);
 }
-input.has-error:focus { outline-color: var(--red); }
+
+input.has-error:focus {
+    outline-color: var(--red);
+}
+
+@media (max-width: 640px) {
+    .auth-screen {
+        place-items: start center;
+        padding: 28px 16px;
+    }
+
+    .auth-card {
+        padding: 30px 22px;
+    }
+
+    .auth-header h1 {
+        font-size: 42px;
+    }
+
+    .auth-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-field--wide {
+        grid-column: auto;
+    }
+
+    .auth-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .auth-primary {
+        width: 100%;
+    }
+}
+
+
+.auth-card--login {
+    width: min(700px, 100%);
+}
 </style>

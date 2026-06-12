@@ -44,6 +44,7 @@ const open   = ref(false);
 
 const accounts = [
     { email: 'driver@truckroute.local',   name: 'Даниил Наумик', role: 'driver',   password: 'password' },
+    { email: 'driver2@truckroute.local',  name: 'Алексей Ковалев', role: 'driver',  password: 'password' },
     { email: 'provider@truckroute.local', name: 'АЗС Партнёр',   role: 'provider', password: 'password' },
     { email: 'fleet@truckroute.local',    name: 'Логист Парк',   role: 'fleet',    password: 'password' },
     { email: 'admin@truckroute.local',    name: 'Администратор', role: 'admin',    password: 'password' },
