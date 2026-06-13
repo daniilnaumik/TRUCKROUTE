@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\PoiReview;
 use App\Models\PoiRouteSelection;
 use App\Models\ServiceObject;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +19,9 @@ class ProviderAnalyticsController extends Controller
     public function index(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
-        $pois   = ServiceObject::where('provider_id', $userId)->get();
+        $pois   = ServiceObject::where('provider_id', $userId)
+            ->withAvg('reviews', 'rating')
+            ->get();
         $poiIds = $pois->pluck('id');
 
         $totalAccepts = PoiRouteSelection::whereIn('service_object_id', $poiIds)
@@ -27,8 +30,10 @@ class ProviderAnalyticsController extends Controller
         $totalRejects = PoiRouteSelection::whereIn('service_object_id', $poiIds)
             ->where('action', 'rejected')->count();
 
+        $reviewsQuery = PoiReview::whereIn('service_object_id', $poiIds);
         $totalViews = (int) $pois->sum('view_count');
-        $avgRating  = $pois->whereNotNull('rating')->avg('rating');
+        $totalReviews = (clone $reviewsQuery)->count();
+        $avgRating = (clone $reviewsQuery)->avg('rating');
 
         // Selections per day for the last 30 days
         $byDay = PoiRouteSelection::whereIn('service_object_id', $poiIds)
@@ -56,7 +61,9 @@ class ProviderAnalyticsController extends Controller
                 'selections_count' => (int) $poi->selections_count,
                 'accepts'          => $accepts,
                 'rejects'          => $rejects,
-                'rating'           => $poi->rating !== null ? (float) $poi->rating : null,
+                'rating'           => $poi->reviews_avg_rating !== null
+                    ? round((float) $poi->reviews_avg_rating, 2)
+                    : null,
             ];
         })->values();
 
@@ -67,6 +74,7 @@ class ProviderAnalyticsController extends Controller
                     'total_accepts' => $totalAccepts,
                     'total_rejects' => $totalRejects,
                     'total_views'   => $totalViews,
+                    'total_reviews' => $totalReviews,
                     'avg_rating'    => $avgRating !== null ? round((float) $avgRating, 2) : null,
                 ],
                 'selections_by_day' => $byDay,

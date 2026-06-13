@@ -1,22 +1,30 @@
 <template>
     <div>
-        <!-- Hero -->
-        <section class="page-hero">
-            <div class="container">
-                <div>
-                    <span class="badge">Кабинет поставщика</span>
-                    <h1 style="margin-top:12px;">Мои объекты</h1>
-                    <p class="lead">Управление карточками и аналитика маршрутов водителей.</p>
-                    <div class="actions" style="margin-top:20px;flex-wrap:wrap;gap:8px;">
-                        <RouterLink :to="{ name: 'provider-poi-new' }" class="btn">+ Добавить объект</RouterLink>
-                        <button class="btn outline" :class="{ 'is-active': activeTab === 'analytics' }"
-                            @click="activeTab = 'analytics'">📊 Аналитика</button>
-                        <button class="btn outline" :class="{ 'is-active': activeTab === 'objects' }"
-                            @click="activeTab = 'objects'">🗂 Объекты</button>
-                    </div>
+        <section class="provider-intro">
+            <div class="container provider-intro__inner">
+                <div class="provider-intro__copy">
+                    <span class="provider-intro__eyebrow">Кабинет поставщика</span>
+                    <h1>Объекты и их эффективность</h1>
+                    <p>Добавляйте точки дорожного сервиса, обновляйте информацию и отслеживайте, как водители находят и выбирают их во время поездок.</p>
                 </div>
-                <div class="page-visual">
-                    <img src="/assets/images/road-sunset-low.jpg" alt="Поставщик">
+                <div class="provider-intro__actions">
+                    <RouterLink :to="{ name: 'provider-poi-new' }" class="btn">+ Добавить объект</RouterLink>
+                    <div class="provider-tabs" aria-label="Разделы кабинета">
+                        <button
+                            class="provider-tab"
+                            :class="{ 'is-active': activeTab === 'analytics' }"
+                            @click="activeTab = 'analytics'"
+                        >
+                            Аналитика
+                        </button>
+                        <button
+                            class="provider-tab"
+                            :class="{ 'is-active': activeTab === 'objects' }"
+                            @click="activeTab = 'objects'"
+                        >
+                            Объекты
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -26,7 +34,13 @@
             <!-- KPI cards -->
             <section class="section-tight">
                 <div class="container">
-                    <h2>Сводка</h2>
+                    <div class="summary-heading">
+                        <div>
+                            <span>Текущие показатели</span>
+                            <h2>Сводка</h2>
+                        </div>
+                        <p>Данные рассчитаны по вашим объектам, просмотрам карточек, решениям водителей и опубликованным отзывам.</p>
+                    </div>
                     <div v-if="analyticsLoading" class="grid-4 equal-card-grid" style="margin-top:28px;">
                         <div class="card skeleton" v-for="i in 4" :key="i" style="height:90px;"></div>
                     </div>
@@ -40,8 +54,8 @@
                             <span class="kpi-lbl">Принятий</span>
                         </div>
                         <div class="card kpi-card">
-                            <span class="kpi-val">{{ analytics?.summary?.total_views ?? 0 }}</span>
-                            <span class="kpi-lbl">Просмотров</span>
+                            <span class="kpi-val">{{ analytics?.summary?.total_reviews ?? 0 }}</span>
+                            <span class="kpi-lbl">Отзывов</span>
                         </div>
                         <div class="card kpi-card">
                             <span class="kpi-val" style="color:var(--accent)">
@@ -429,6 +443,101 @@ async function savePoi() {
     padding: 20px 12px;
     text-align: center;
 }
+
+.provider-intro {
+    padding: 58px 0 18px;
+}
+
+.provider-intro__inner {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 48px;
+    padding-bottom: 34px;
+    border-bottom: 1px solid var(--border);
+}
+
+.provider-intro__copy {
+    max-width: 720px;
+}
+
+.provider-intro__eyebrow,
+.summary-heading span {
+    display: block;
+    color: var(--accent);
+    font-family: var(--font-m);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.provider-intro h1 {
+    max-width: 680px;
+    margin: 10px 0 0;
+    font-size: clamp(34px, 4vw, 52px);
+    line-height: 1.02;
+}
+
+.provider-intro__copy p {
+    max-width: 650px;
+    margin: 18px 0 0;
+    color: var(--text-2);
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.provider-intro__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.provider-tabs {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.provider-tab {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-2);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.provider-tab.is-active {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+.summary-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+.summary-heading h2 {
+    margin-top: 6px;
+}
+
+.summary-heading p {
+    max-width: 560px;
+    margin: 0;
+    color: var(--text-3);
+    font-size: 12px;
+    line-height: 1.55;
+    text-align: right;
+}
 .kpi-val {
     font-family: var(--font-m);
     font-size: 28px;
@@ -653,6 +762,25 @@ async function savePoi() {
 }
 
 @media (max-width: 560px) {
+    .provider-intro {
+        padding-top: 34px;
+    }
+
+    .provider-intro__inner,
+    .summary-heading {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .provider-intro__actions {
+        justify-content: flex-start;
+    }
+
+    .summary-heading p {
+        text-align: left;
+    }
+
     .provider-detail-stats {
         grid-template-columns: 1fr;
     }
