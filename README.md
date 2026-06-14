@@ -66,6 +66,7 @@ php artisan key:generate
 ```env
 APP_URL=http://localhost:8000
 APP_DEBUG=true
+DEMO_ACCOUNTS_ENABLED=true
 
 DB_CONNECTION=sqlite
 
@@ -426,10 +427,18 @@ tests/
 
 ## Dev-инструменты
 
-**Переключатель ролей в navbar** (видим только при `APP_DEBUG=true`):  
+**Переключатель ролей в navbar** (управляется переменной `DEMO_ACCOUNTS_ENABLED`):
 Кнопка `тест` открывает список демонстрационных водителей, поставщика,
 владельца автопарка и администратора.
-Работает через `/dev/switch?email=...` — выход + вход в одном GET-запросе.
+Переключатель использует обычный API-вход с учетными данными, созданными
+сидером. Он работает и при `APP_DEBUG=false`, поэтому демонстрационный сервер
+можно запускать без вывода отладочной информации Laravel.
+
+Для публичного сервера без демонстрационных аккаунтов укажите:
+
+```env
+DEMO_ACCOUNTS_ENABLED=false
+```
 
 **Тестовые тайлы карты:**  
 CartoDB Voyager — светлые, читаемые: `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`
@@ -460,7 +469,8 @@ php artisan queue:work --tries=3 --sleep=3 --daemon
 
 | Переменная | По умолчанию | Описание |
 |-----------|-------------|----------|
-| `APP_DEBUG` | `true` | Dev-режим. `false` в продакшн. Управляет dev-switcher |
+| `APP_DEBUG` | `true` | Отладочный режим Laravel. На сервере рекомендуется `false` |
+| `DEMO_ACCOUNTS_ENABLED` | `true` | Показывает переключатель тестовых аккаунтов независимо от `APP_DEBUG` |
 | `GEO_GEOCODER` | `nominatim` | Геокодер: `nominatim` или `yandex` |
 | `GEO_ROUTING` | `osrm` | Роутер: `osrm` или `yandex` |
 | `OSRM_BASE_URL` | `https://router.project-osrm.org` | URL OSRM сервера |

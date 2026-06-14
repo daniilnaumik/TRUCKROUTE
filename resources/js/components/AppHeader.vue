@@ -64,8 +64,8 @@
                 </template>
             </div>
 
-            <!-- Dev test-account switcher -->
-            <DevSwitcher v-if="isDebug" />
+            <!-- Demonstration account switcher -->
+            <DevSwitcher v-if="demoAccountsEnabled" />
 
             <!-- Theme toggle -->
             <button class="nav-theme-toggle" type="button" aria-label="Переключить тему" @click="ui.toggleTheme()">
@@ -119,7 +119,7 @@ const notifOpen   = ref(false);
 const notifications = ref([]);
 const notifWrap   = ref(null);
 
-const isDebug = computed(() => window.__APP_DEBUG__ === true);
+const demoAccountsEnabled = computed(() => window.__DEMO_ACCOUNTS_ENABLED__ === true);
 const unreadCount = computed(() => notifications.value.length);
 
 function toggleMenu() { menuOpen.value = !menuOpen.value; }

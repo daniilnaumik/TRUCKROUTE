@@ -1,6 +1,6 @@
 <template>
     <div class="nav-test-switcher" ref="wrap">
-        <button class="nav-test-switcher__btn" type="button" title="Dev: быстрый вход" @click="open = !open">
+        <button class="nav-test-switcher__btn" type="button" title="Тестовые аккаунты" @click="open = !open">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>

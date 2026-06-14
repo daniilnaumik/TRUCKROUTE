@@ -23,6 +23,7 @@
     {{-- Pass server-side flags to JS --}}
     <script>
         window.__APP_DEBUG__ = {{ config('app.debug') ? 'true' : 'false' }};
+        window.__DEMO_ACCOUNTS_ENABLED__ = {{ config('demo.accounts_enabled') ? 'true' : 'false' }};
         window.__APP_URL__   = '{{ config('app.url') }}';
         window.__YANDEX_JS_API_KEY__ = @json(config('geo.tiles.yandex.api_key'));
     </script>

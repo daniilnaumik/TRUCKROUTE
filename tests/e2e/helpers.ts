@@ -6,7 +6,7 @@ export const DEV_ACCOUNTS = {
 } as const;
 
 /**
- * Login via the dev switcher dropdown (only available when APP_DEBUG=true).
+ * Login via the demonstration account switcher dropdown.
  * Faster than filling the login form in each test.
  */
 export async function loginViaDevSwitcher(page: Page, role: 'driver' | 'admin') {

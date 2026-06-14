@@ -323,7 +323,7 @@ img {
 [data-theme="dark"] .nav-theme-toggle .icon-sun  { display: block; }
 [data-theme="dark"] .nav-theme-toggle .icon-moon { display: none; }
 
-/* ── Dev test-account switcher (shown only when APP_DEBUG=true) ─────── */
+/* ── Demonstration account switcher ────────────────────────────────── */
 .nav-test-switcher {
     position: relative;
     display: flex;

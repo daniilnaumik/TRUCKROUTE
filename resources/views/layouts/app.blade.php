@@ -55,9 +55,9 @@
                 @endauth
             </div>
 
-            @if(config('app.debug'))
+            @if(config('demo.accounts_enabled'))
             <div class="nav-test-switcher" id="navTestSwitcher">
-                <button class="nav-test-switcher__btn" id="testSwitcherBtn" type="button" title="Dev: быстрый вход">
+                <button class="nav-test-switcher__btn" id="testSwitcherBtn" type="button" title="Тестовые аккаунты">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     <span class="nav-test-switcher__label">тест</span>
                 </button>
@@ -66,7 +66,10 @@
                     @php
                         $devAccounts = [
                             ['email' => 'driver@truckroute.local', 'name' => 'Даниил Наумик', 'role' => 'driver'],
-                            ['email' => 'admin@truckroute.local',  'name' => 'Администратор', 'role' => 'admin'],
+                            ['email' => 'driver2@truckroute.local', 'name' => 'Алексей Ковалев', 'role' => 'driver'],
+                            ['email' => 'provider@truckroute.local', 'name' => 'АЗС Партнёр', 'role' => 'provider'],
+                            ['email' => 'fleet@truckroute.local', 'name' => 'Логист Парк', 'role' => 'fleet'],
+                            ['email' => 'admin@truckroute.local', 'name' => 'Администратор', 'role' => 'admin'],
                         ];
                     @endphp
                     @foreach($devAccounts as $devAccount)

@@ -4,11 +4,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
-// ── Dev-only: quick account switcher ──────────────────────────────────────
-// Only registered when APP_DEBUG=true. Allows instant role switch in testing.
-if (config('app.debug')) {
+// ── Demo-only: quick account switcher ─────────────────────────────────────
+// Independent from APP_DEBUG so a deployed diploma demo can keep debug off.
+if (config('demo.accounts_enabled')) {
     Route::get('/dev/switch', function (\Illuminate\Http\Request $request) {
-        $allowed = ['driver@truckroute.local', 'admin@truckroute.local'];
+        $allowed = [
+            'driver@truckroute.local',
+            'driver2@truckroute.local',
+            'provider@truckroute.local',
+            'fleet@truckroute.local',
+            'admin@truckroute.local',
+        ];
         $email   = $request->query('email', '');
         if (!in_array($email, $allowed, true)) {
             return redirect('/');
